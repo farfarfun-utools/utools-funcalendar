@@ -1,0 +1,32 @@
+name: CI
+on:
+  push:
+    branches: [master]
+    paths-ignore: ['docs/**', '*.md']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - name: Check and build
+        run: sh build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: utools-funcalendar
+          path: |
+            utools/dist
+            utools/plugin.json
+            utools/logo.png
+          if-no-files-found: error

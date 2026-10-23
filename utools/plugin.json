@@ -1,0 +1,22 @@
+{
+  "pluginName": "日历 FunCalendar",
+  "version": "1.0.0",
+  "description": "一页看阳历、农历与黄历宜忌，离线查询节气、节日与吉日",
+  "author": "farfarfun",
+  "main": "dist/index.html",
+  "logo": "logo.png",
+  "pluginSetting": { "height": 620 },
+  "features": [
+    {
+      "code": "calendar",
+      "explain": "查看阳历、农历、节气与每日宜忌",
+      "cmds": ["FunCalendar", "日历", "万年历", "农历", "黄历"]
+    },
+    {
+      "code": "auspicious",
+      "explain": "按嫁娶、搬家、开市等事项查询当月吉日",
+      "cmds": ["吉日", "择吉", "黄道吉日"]
+    }
+  ],
+  "platform": ["darwin", "win32", "linux"]
+}
