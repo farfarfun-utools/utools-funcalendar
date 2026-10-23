@@ -119,7 +119,7 @@ onUnmounted(() => {
     <header class="app-header">
       <div class="brand">
         <span class="brand-icon"><AppIcon name="calendar" /></span>
-        <div><h1>日历 <span>FunCalendar</span></h1><p>日有所见，岁有所期</p></div>
+        <div><h1>时光常伴 <span>FunCalendar</span></h1><p>日有所见，岁有所期</p></div>
       </div>
       <nav class="view-switch" aria-label="日历模式">
         <button :class="{ active: view === 'calendar' }" :aria-pressed="view === 'calendar'" @click="view = 'calendar'">月历</button>

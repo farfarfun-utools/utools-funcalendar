@@ -1,7 +1,7 @@
 {
-  "pluginName": "日历 FunCalendar",
+  "pluginName": "时光常伴",
   "version": "1.0.0",
-  "description": "一页看阳历、农历与黄历宜忌，离线查询节气、节日与吉日",
+  "description": "时光常伴 FunCalendar：离线双历与黄历，查看阳历、农历、节气、节日、每日宜忌，按事查询吉日",
   "author": "farfarfun",
   "main": "dist/index.html",
   "logo": "logo.png",
@@ -10,7 +10,7 @@
     {
       "code": "calendar",
       "explain": "查看阳历、农历、节气与每日宜忌",
-      "cmds": ["FunCalendar", "日历", "万年历", "农历", "黄历"]
+      "cmds": ["时光常伴", "FunCalendar", "日历", "万年历", "农历", "黄历"]
     },
     {
       "code": "auspicious",

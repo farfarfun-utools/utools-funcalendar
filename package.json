@@ -1,6 +1,15 @@
 {
   "name": "utools-funcalendar",
   "version": "1.0.0",
+  "description": "时光常伴 FunCalendar：离线阳历、农历、节气与黄历宜忌，支持按事择吉的 uTools 插件",
+  "license": "MIT",
+  "homepage": "https://github.com/farfarfun-utools/utools-funcalendar#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/farfarfun-utools/utools-funcalendar.git"
+  },
+  "bugs": { "url": "https://github.com/farfarfun-utools/utools-funcalendar/issues" },
+  "keywords": ["utools", "utools-plugin", "calendar", "lunar-calendar", "chinese-calendar", "almanac", "solar-terms", "auspicious-days", "offline", "vue3", "typescript", "farfarfun"],
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.11.2",

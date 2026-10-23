@@ -1,11 +1,15 @@
-# 日历 FunCalendar
+# 时光常伴 FunCalendar
 
-一款清爽的 uTools 双历与黄历插件。松绿色、暖白纸感，一页看阳历、农历和每日宜忌。
+**时光常伴**是一款离线使用的 uTools 双历与黄历插件：一页看阳历、农历、二十四节气和每日宜忌，按嫁娶、搬家、开市等事项查询吉日。松绿色、暖白纸感，日有所见，岁有所期。
 
-<p align="center"><img src="utools/logo.png" alt="FunCalendar" width="80"></p>
+Offline Gregorian & Chinese lunar calendar for uTools, with solar terms, traditional almanac and auspicious date filtering.
+
+<p align="center"><img src="utools/logo.png" alt="时光常伴 FunCalendar" width="80"></p>
 
 [![CI](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml/badge.svg)](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml)
 [![Screenshots](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/screenshots.yml/badge.svg)](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/screenshots.yml)
+
+[安装与使用](#开发与安装) · [构建包下载](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml) · [问题反馈](https://github.com/farfarfun-utools/utools-funcalendar/issues) · [组织插件总览](https://github.com/farfarfun-utools/utools-plugins)
 
 ## 功能
 
@@ -51,7 +55,7 @@ sh build.sh       # 安装锁定依赖、检查、测试、构建及清单校验
 pnpm screenshots  # 构建后生成截图，同时运行浏览器检查
 ```
 
-在 uTools 开发者工具中创建项目，导入 **`utools/plugin.json`**。输入 `日历`、`农历`、`黄历` 或 `FunCalendar` 进入月历；输入 `吉日`、`择吉` 或 `黄道吉日` 进入择吉模式。
+在 uTools 开发者工具中创建项目，导入 **`utools/plugin.json`**。输入 `时光常伴`、`日历`、`农历`、`黄历` 或 `FunCalendar` 进入月历；输入 `吉日`、`择吉` 或 `黄道吉日` 进入择吉模式。
 
 CI 也会上传可直接导入开发者工具的 `utools-funcalendar` 构建产物，下载解压后选择其中的 `plugin.json`。
 
