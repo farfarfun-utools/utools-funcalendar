@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
-import { mount, type VueWrapper } from '@vue/test-utils'
+/// <reference types="vitest/jsdom" />
+import { enableAutoUnmount, mount, type VueWrapper } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import App from '../src/App.vue'
@@ -8,9 +9,13 @@ let wrapper: VueWrapper
 let enter: (action: { code: string }) => void
 let search: (input: { text: string }) => void
 
+enableAutoUnmount(afterEach)
+
 beforeEach(() => {
   vi.useFakeTimers()
   vi.setSystemTime(new Date(2026, 9, 23, 12))
+  // Node 的 Web Storage 会遮住 jsdom 的同名属性，测试明确使用浏览器存储。
+  vi.stubGlobal('localStorage', jsdom.window.localStorage)
   localStorage.clear()
   vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() })))
   window.utools = {
@@ -20,7 +25,6 @@ beforeEach(() => {
   wrapper = mount(App, { attachTo: document.body })
 })
 afterEach(() => {
-  wrapper.unmount()
   delete window.utools
   vi.useRealTimers()
   vi.unstubAllGlobals()
