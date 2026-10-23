@@ -4,12 +4,12 @@
 
 Offline Gregorian & Chinese lunar calendar for uTools, with solar terms, traditional almanac and auspicious date filtering.
 
-<p align="center"><img src="utools/logo.png" alt="时光常伴 FunCalendar" width="80"></p>
+<p align="center"><img src="utools/logo.png" alt="时光常伴 FunCalendar" width="88"></p>
 
 [![CI](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml/badge.svg)](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml)
 [![Screenshots](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/screenshots.yml/badge.svg)](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/screenshots.yml)
 
-[安装与使用](#开发与安装) · [构建包下载](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml) · [问题反馈](https://github.com/farfarfun-utools/utools-funcalendar/issues) · [组织插件总览](https://github.com/farfarfun-utools/utools-plugins)
+[产品主页](https://farfarfun.github.io/packages/utools-funcalendar/) · [安装与使用](#开发与安装) · [构建包下载](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml) · [问题反馈](https://github.com/farfarfun-utools/utools-funcalendar/issues) · [组织插件总览](https://github.com/farfarfun-utools/utools-plugins)
 
 ## 功能
 
