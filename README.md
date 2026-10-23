@@ -4,7 +4,7 @@
 
 Offline Gregorian & Chinese lunar calendar for uTools, with solar terms, traditional almanac and auspicious date filtering.
 
-<p align="center"><img src="utools/logo.png" alt="时光常伴 FunCalendar" width="88"></p>
+<p align="center"><img src="utools/logo.png" alt="时光常伴 FunCalendar" width="160" height="160"></p>
 
 [![CI](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml/badge.svg)](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml)
 [![Screenshots](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/screenshots.yml/badge.svg)](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/screenshots.yml)
