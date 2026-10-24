@@ -55,7 +55,7 @@ sh build.sh       # 安装锁定依赖、检查、测试、构建及清单校验
 pnpm screenshots  # 构建后生成截图，同时运行浏览器检查
 ```
 
-在 uTools 开发者工具中创建项目，导入 **`utools/plugin.json`**。输入 `时光常伴`、`日历`、`农历`、`黄历` 或 `FunCalendar` 进入月历；输入 `吉日`、`择吉` 或 `黄道吉日` 进入择吉模式。
+在 uTools 开发者工具中创建项目，导入 **`utools/plugin.json`**。输入 `时光常伴`、`FunCalendar`、`日历` 或 `黄历` 进入月历；输入 `吉日` 进入择吉模式，功能指令共 5 条。
 
 CI 也会上传可直接导入开发者工具的 `utools-funcalendar` 构建产物，下载解压后选择其中的 `plugin.json`。
 

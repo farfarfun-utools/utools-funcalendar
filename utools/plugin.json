@@ -10,12 +10,12 @@
     {
       "code": "calendar",
       "explain": "查看阳历、农历、节气与每日宜忌",
-      "cmds": ["时光常伴", "FunCalendar", "日历", "万年历", "农历", "黄历"]
+      "cmds": ["时光常伴", "FunCalendar", "日历", "黄历"]
     },
     {
       "code": "auspicious",
       "explain": "按嫁娶、搬家、开市等事项查询当月吉日",
-      "cmds": ["吉日", "择吉", "黄道吉日"]
+      "cmds": ["吉日"]
     }
   ],
   "platform": ["darwin", "win32", "linux"]
