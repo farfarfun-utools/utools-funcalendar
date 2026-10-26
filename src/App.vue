@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import logoUrl from '../utools/logo.png'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import AppIcon from './components/AppIcon.vue'
 import { ACTIVITIES, MAX_YEAR, MIN_YEAR, WEEKDAYS, dateKey, getDay, localDate, matchesActivity, monthDays, moveMonth, parseDate } from './lib/calendar'
@@ -118,7 +119,7 @@ onUnmounted(() => {
   <div class="app-shell">
     <header class="app-header">
       <div class="brand">
-        <span class="brand-icon"><AppIcon name="calendar" /></span>
+        <img class="brand-icon" :src="logoUrl" alt="" />
         <div><h1>时光常伴 <span>FunCalendar</span></h1><p>日有所见，岁有所期</p></div>
       </div>
       <nav class="view-switch" aria-label="日历模式">
