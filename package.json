@@ -1,6 +1,6 @@
 {
   "name": "utools-funcalendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "时光常伴 FunCalendar：离线阳历、农历、节气与黄历宜忌，支持按事择吉的 uTools 插件",
   "license": "MIT",
   "homepage": "https://farfarfun.github.io/packages/utools-funcalendar/",

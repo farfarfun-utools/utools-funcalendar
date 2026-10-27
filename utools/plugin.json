@@ -1,6 +1,6 @@
 {
   "pluginName": "时光常伴",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "时光常伴 FunCalendar：离线双历与黄历，查看阳历、农历、节气、节日、每日宜忌，按事查询吉日",
   "author": "farfarfun",
   "main": "dist/index.html",

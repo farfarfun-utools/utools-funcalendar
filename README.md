@@ -11,6 +11,12 @@ Offline Gregorian & Chinese lunar calendar for uTools, with solar terms, traditi
 
 [产品主页](https://farfarfun.github.io/packages/utools-funcalendar/) · [安装与使用](#开发与安装) · [构建包下载](https://github.com/farfarfun-utools/utools-funcalendar/actions/workflows/ci.yml) · [问题反馈](https://github.com/farfarfun-utools/utools-funcalendar/issues) · [组织插件总览](https://github.com/farfarfun-utools/utools-plugins)
 
+## UPXS 安装与发布
+
+从 [v1.0.1 Release](https://github.com/farfarfun-utools/utools-funcalendar/releases/tag/v1.0.1) 下载 `utools-funcalendar-1.0.1.upxs`，导入 uTools 测试。也可在成功的 CI 中下载 `utools-funcalendar-upxs-preview` 附件。打包链路已由用户在 FunCalc 上验证；本插件的实机安装与功能仍需分别确认。
+
+项目根目录 [`identity.json`](identity.json) 明文维护官方项目 ID `zkaeqgkd`。`mid`、`uid`、`cellphone` 由 `farfarfun-utools` 组织的 `UTOOLS_MID`、`UTOOLS_UID`、`UTOOLS_CELLPHONE` Secrets 注入，不写入公开配置。CI 和 Release 统一调用固定版本的 [utools-devtools](https://github.com/farfarfun-action/utools-devtools)，生成 `.upxs` 与 `SHA256SUMS`，PR 不执行身份打包。
+
 ## 功能
 
 - **双历月视图**：阳历与农历同屏，显示闰月、传统节日和二十四节气，支持 1901–2100 年。
