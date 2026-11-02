@@ -17,6 +17,10 @@ Offline Gregorian & Chinese lunar calendar for uTools, with solar terms, traditi
 
 项目根目录 [`identity.json`](identity.json) 明文维护官方项目 ID `zkaeqgkd`。`mid`、`uid`、`cellphone` 由 `farfarfun-utools` 组织的 `UTOOLS_MID`、`UTOOLS_UID`、`UTOOLS_CELLPHONE` Secrets 注入，不写入公开配置。CI 和 Release 统一调用固定版本的 [utools-devtools](https://github.com/farfarfun-action/utools-devtools)，生成 `.upxs` 与 `SHA256SUMS`，PR 不执行身份打包。
 
+## AI / MCP 工具
+
+`get_calendar_day` 查询指定公历日期的农历、节气、节日与宜忌；`find_auspicious_days` 按月份及事项筛选日期。两项工具均离线运行，结果仅供民俗参考。需 uTools 8 的工具能力，第三方 Agent 还需由用户开启 uTools MCP 服务。
+
 ## 功能
 
 - **双历月视图**：阳历与农历同屏，显示闰月、传统节日和二十四节气，支持 1901–2100 年。

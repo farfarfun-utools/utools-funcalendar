@@ -18,5 +18,28 @@
       "cmds": ["吉日"]
     }
   ],
-  "platform": ["darwin", "win32", "linux"]
+  "platform": ["darwin", "win32", "linux"],
+  "tools": {
+    "get_calendar_day": {
+      "description": "查询指定公历日期的农历、节气、节日、宜忌和黄道信息；仅供民俗参考。",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": { "date": { "type": "string", "description": "公历日期 YYYY-MM-DD，范围 1901–2100" } },
+        "required": ["date"]
+      }
+    },
+    "find_auspicious_days": {
+      "description": "按月份和事项查黄道吉日；仅供民俗参考。",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "month": { "type": "string", "description": "公历月份 YYYY-MM，范围 1901–2100" },
+          "activity": { "type": "string", "description": "留空查黄道吉日，或填嫁娶、入宅、开市、出行、动土", "enum": ["", "嫁娶", "入宅", "开市", "出行", "动土"] }
+        },
+        "required": ["month"]
+      }
+    }
+  }
 }

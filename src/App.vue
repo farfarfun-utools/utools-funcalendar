@@ -2,7 +2,7 @@
 import logoUrl from '../utools/logo.png'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue'
 import AppIcon from './components/AppIcon.vue'
-import { ACTIVITIES, MAX_YEAR, MIN_YEAR, WEEKDAYS, dateKey, getDay, localDate, matchesActivity, monthDays, moveMonth, parseDate } from './lib/calendar'
+import { ACTIVITIES, MAX_YEAR, MIN_YEAR, WEEKDAYS, auspiciousDays, calendarDayInfo, dateKey, getDay, localDate, matchesActivity, monthDays, moveMonth, parseDate } from './lib/calendar'
 
 const today = ref(dateKey(new Date()))
 const selected = ref(parseDate(today.value) ?? localDate(2026, 1, 1))
@@ -98,6 +98,8 @@ let timer: ReturnType<typeof setInterval>
 let active = false
 onMounted(() => {
   active = true
+  window.utools?.registerTool?.('get_calendar_day', ({ date }) => calendarDayInfo(date))
+  window.utools?.registerTool?.('find_auspicious_days', ({ month, activity }) => auspiciousDays(month, activity))
   timer = setInterval(syncClock, 30_000)
   media.addEventListener('change', syncTheme)
   window.utools?.onPluginEnter(({ code }) => {

@@ -64,3 +64,34 @@ export function monthDays(date: Date): CalendarDay[] {
 export function matchesActivity(day: CalendarDay, activity: string): boolean {
   return activity ? day.yi.includes(activity) && !day.ji.includes(activity) : day.auspicious
 }
+
+export function calendarDayInfo(input: unknown) {
+  const date = typeof input === 'string' ? parseDate(input) : null
+  if (!date) throw new Error(`请提供 ${MIN_YEAR}–${MAX_YEAR} 年内的有效日期 YYYY-MM-DD`)
+  const day = getDay(date)
+  return {
+    date: day.key,
+    weekday: `星期${WEEKDAYS[(date.getDay() + 6) % 7]}`,
+    lunarDate: day.lunarDate,
+    term: day.term,
+    festivals: day.festivals,
+    yi: day.yi,
+    ji: day.ji,
+    auspicious: day.auspicious,
+  }
+}
+
+export function auspiciousDays(input: unknown, activityInput: unknown = '') {
+  const month = typeof input === 'string' && /^\d{4}-\d{2}$/.test(input) ? input : ''
+  const date = parseDate(`${month}-01`)
+  if (!date) throw new Error(`请提供 ${MIN_YEAR}–${MAX_YEAR} 年内的有效月份 YYYY-MM`)
+  const activity = activityInput === undefined ? '' : activityInput
+  if (typeof activity !== 'string' || !ACTIVITIES.some(item => item.value === activity)) throw new Error('事项只能是嫁娶、入宅、开市、出行或动土')
+  return {
+    month,
+    activity: activity || '黄道吉日',
+    days: monthDays(date)
+      .filter(day => day.date.getMonth() === date.getMonth() && matchesActivity(day, activity))
+      .map(day => ({ date: day.key, lunarDate: day.lunarDate, yi: day.yi, ji: day.ji })),
+  }
+}
