@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { dateKey, getDay, localDate, matchesActivity, monthDays, moveMonth, parseDate } from '../src/lib/calendar'
+import { auspiciousDays, calendarDayInfo, dateKey, getDay, localDate, matchesActivity, monthDays, moveMonth, parseDate } from '../src/lib/calendar'
 
 describe('日期与月视图', () => {
   it('接受本地日期，拒绝溢出日期与范围外的输入', () => {
@@ -32,6 +32,16 @@ describe('日期与月视图', () => {
 })
 
 describe('农历与黄历', () => {
+  it('AI 查询只返回可序列化日期字段，并按事项筛选当月', () => {
+    expect(calendarDayInfo('2026-02-17').lunarDate).toBe('正月初一')
+    expect(Object.keys(calendarDayInfo('2026-02-17'))).not.toContain('lunar')
+    const result = auspiciousDays('2026-10', '嫁娶')
+    expect(result.days.every(day => day.date.startsWith('2026-10') && day.yi.includes('嫁娶') && !day.ji.includes('嫁娶'))).toBe(true)
+    expect(result.days.map(day => day.date)).toContain('2026-10-23')
+    expect(() => calendarDayInfo('2026-02-29')).toThrow('有效日期')
+    expect(() => auspiciousDays('2026-13')).toThrow('有效月份')
+    expect(() => auspiciousDays('2026-10', '探病')).toThrow('事项')
+  })
   it('显示已知春节、闰六月、清明和国庆日期', () => {
     const spring = getDay(localDate(2026, 2, 17))
     expect(spring.lunarDate).toBe('正月初一')
