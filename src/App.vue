@@ -152,8 +152,14 @@ onUnmounted(() => {
             <div class="month-title">
               <span class="eyebrow">{{ view === 'calendar' ? '每一个日子，都值得好好度过' : '为重要的事，选一个好日子' }}</span>
               <div class="month-selects">
-                <select aria-label="年份" :value="selected.getFullYear()" @change="changeMonth($event, 'year')"><option v-for="year in years" :key="year" :value="year">{{ year }} 年</option></select>
-                <select aria-label="月份" :value="selected.getMonth() + 1" @change="changeMonth($event, 'month')"><option v-for="month in 12" :key="month" :value="month">{{ String(month).padStart(2, '0') }} 月</option></select>
+                <span class="select-pill">
+                  <select aria-label="年份" :value="selected.getFullYear()" @change="changeMonth($event, 'year')"><option v-for="year in years" :key="year" :value="year">{{ year }} 年</option></select>
+                  <AppIcon name="chevron-down" class="select-chevron" />
+                </span>
+                <span class="select-pill">
+                  <select aria-label="月份" :value="selected.getMonth() + 1" @change="changeMonth($event, 'month')"><option v-for="month in 12" :key="month" :value="month">{{ String(month).padStart(2, '0') }} 月</option></select>
+                  <AppIcon name="chevron-down" class="select-chevron" />
+                </span>
               </div>
             </div>
             <div class="month-actions">
@@ -182,7 +188,8 @@ onUnmounted(() => {
               :title="[day.key, day.lunarDate, day.term, ...day.festivals].filter(Boolean).join(' · ')"
               @click="select(day.date)"
             >
-              <span class="day-number">{{ day.day }}<span v-if="day.key === today" class="today-mark">今</span></span>
+              <span class="day-number">{{ day.day }}</span>
+              <span v-if="day.key === today" class="today-mark">今</span>
               <span class="lunar-label">{{ day.label }}</span>
               <span v-if="isMatch" class="good-mark">宜</span>
             </button>
