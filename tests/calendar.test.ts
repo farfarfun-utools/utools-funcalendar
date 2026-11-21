@@ -42,6 +42,16 @@ describe('农历与黄历', () => {
     expect(() => auspiciousDays('2026-13')).toThrow('有效月份')
     expect(() => auspiciousDays('2026-10', '探病')).toThrow('事项')
   })
+  it('择吉查询支持去除空白及 YYYY-M / YYYY/MM / YYYY.MM 格式', () => {
+    const baseline = auspiciousDays('2026-02', '嫁娶')
+    for (const input of [' 2026-2 ', '2026/02', '2026.2', ' 2026/2 ']) {
+      expect(auspiciousDays(input, ' 嫁娶 ')).toEqual(baseline)
+    }
+    expect(auspiciousDays('2026-2', null)).toEqual(auspiciousDays('2026-02'))
+    expect(() => auspiciousDays('1900-12')).toThrow('有效月份')
+    expect(() => auspiciousDays('2101-01')).toThrow('有效月份')
+    expect(() => auspiciousDays(null)).toThrow('有效月份')
+  })
   it('显示已知春节、闰六月、清明和国庆日期', () => {
     const spring = getDay(localDate(2026, 2, 17))
     expect(spring.lunarDate).toBe('正月初一')

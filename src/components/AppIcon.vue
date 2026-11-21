@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ name: 'calendar' | 'chevron-left' | 'chevron-right' | 'sun' | 'moon' | 'monitor' | 'sparkle' | 'leaf' | 'arrow' }>()
+defineProps<{ name: 'calendar' | 'chevron-left' | 'chevron-right' | 'sun' | 'moon' | 'monitor' | 'sparkle' | 'leaf' }>()
 const paths = {
   calendar: 'M7 3v4m10-4v4M4 10h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Zm3 9h2m4 0h2m-8 3h2',
   'chevron-left': 'm14 6-6 6 6 6',
@@ -9,7 +9,6 @@ const paths = {
   monitor: 'M3 4h18v13H3V4Zm5 17h8m-4-4v4',
   sparkle: 'm12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z',
   leaf: 'M20 4C9 2 3 8 6 14c4 7 14 3 14-10ZM4 21 15 10',
-  arrow: 'M4 12h16m-6-6 6 6-6 6',
 }
 </script>
 

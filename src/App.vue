@@ -21,9 +21,17 @@ const days = computed(() => {
 const current = computed(() => getDay(selected.value))
 const lunar = computed(() => current.value.lunar)
 const inMonth = computed(() => days.value.filter(day => day.date.getMonth() === selected.value.getMonth()))
-const matching = computed(() => inMonth.value.filter(day => matchesActivity(day, activity.value)))
+const dayCells = computed(() => {
+  const month = selected.value.getMonth()
+  const picking = view.value === 'auspicious'
+  return days.value.map(day => {
+    const outside = day.date.getMonth() !== month
+    const isMatch = picking && !outside && matchesActivity(day, activity.value)
+    return { day, outside, isMatch }
+  })
+})
+const matching = computed(() => dayCells.value.filter(cell => cell.isMatch))
 const monthTerms = computed(() => inMonth.value.filter(day => day.term))
-const activityLabel = computed(() => ACTIVITIES.find(item => item.value === activity.value)?.label)
 const nextTerm = computed(() => lunar.value.getNextJieQi(true))
 const weekday = computed(() => `星期${WEEKDAYS[(selected.value.getDay() + 6) % 7]}`)
 const minMonth = computed(() => selected.value.getFullYear() === MIN_YEAR && selected.value.getMonth() === 0)
@@ -59,11 +67,16 @@ function goToday() {
   const date = parseDate(today.value)
   if (date) select(date)
 }
-function jump(text: string) {
-  if (!text.trim()) { searchError.value = ''; return }
+function jump(text: string): boolean {
+  if (!text.trim()) { searchError.value = ''; return false }
   const date = parseDate(text)
-  if (date) select(date)
-  else searchError.value = `请输入 ${MIN_YEAR}–${MAX_YEAR} 年的有效日期，如 2026-10-23`
+  if (date) { select(date); return true }
+  searchError.value = `请输入 ${MIN_YEAR}–${MAX_YEAR} 年的有效日期，如 2026-10-23`
+  return false
+}
+function onDateJump(event: Event) {
+  const input = event.target as HTMLInputElement
+  if (!jump(input.value)) input.value = current.value.key
 }
 function changeMonth(event: Event, part: 'year' | 'month') {
   const value = Number((event.target as HTMLSelectElement).value)
@@ -98,8 +111,8 @@ let timer: ReturnType<typeof setInterval>
 let active = false
 onMounted(() => {
   active = true
-  window.utools?.registerTool?.('get_calendar_day', ({ date }) => calendarDayInfo(date))
-  window.utools?.registerTool?.('find_auspicious_days', ({ month, activity }) => auspiciousDays(month, activity))
+  window.utools?.registerTool?.('get_calendar_day', params => calendarDayInfo(params?.date))
+  window.utools?.registerTool?.('find_auspicious_days', params => auspiciousDays(params?.month, params?.activity))
   timer = setInterval(syncClock, 30_000)
   media.addEventListener('change', syncTheme)
   window.utools?.onPluginEnter(({ code }) => {
@@ -156,14 +169,22 @@ onUnmounted(() => {
 
           <div class="weekdays" aria-hidden="true"><span v-for="(day, index) in WEEKDAYS" :key="day" :class="{ weekend: index > 4 }">{{ day }}</span></div>
           <div ref="grid" class="calendar-grid" :class="{ 'picking-days': view === 'auspicious' }" @keydown="onGridKey">
-            <button v-for="day in days" :key="day.key" class="day-cell"
-              :class="{ outside: day.date.getMonth() !== selected.getMonth(), selected: day.key === current.key, 'is-today': day.key === today, weekend: day.date.getDay() === 0 || day.date.getDay() === 6, 'has-festival': !!day.term || day.festivals.length > 0, suitable: view === 'auspicious' && day.date.getMonth() === selected.getMonth() && matchesActivity(day, activity) }"
-              :disabled="!day.available" :aria-pressed="day.key === current.key" :aria-current="day.key === today ? 'date' : undefined"
-              :aria-label="`${day.key}，农历${day.lunarDate}${day.term ? '，' + day.term : ''}${day.festivals.length ? '，' + day.festivals.join('、') : ''}${view === 'auspicious' && matchesActivity(day, activity) ? '，' + (activity ? '宜' + activity : '黄道吉日') : ''}`"
-              :tabindex="day.key === current.key ? 0 : -1" :title="[day.key, day.lunarDate, day.term, ...day.festivals].filter(Boolean).join(' · ')" @click="select(day.date)">
+            <button
+              v-for="{ day, outside, isMatch } in dayCells"
+              :key="day.key"
+              class="day-cell"
+              :class="{ outside, selected: day.key === current.key, 'is-today': day.key === today, weekend: day.date.getDay() === 0 || day.date.getDay() === 6, 'has-festival': !!day.term || day.festivals.length > 0, suitable: isMatch }"
+              :disabled="!day.available"
+              :aria-pressed="day.key === current.key"
+              :aria-current="day.key === today ? 'date' : undefined"
+              :aria-label="`${day.key}，农历${day.lunarDate}${day.term ? '，' + day.term : ''}${day.festivals.length ? '，' + day.festivals.join('、') : ''}${isMatch ? '，' + (activity ? '宜' + activity : '黄道吉日') : ''}`"
+              :tabindex="day.key === current.key ? 0 : -1"
+              :title="[day.key, day.lunarDate, day.term, ...day.festivals].filter(Boolean).join(' · ')"
+              @click="select(day.date)"
+            >
               <span class="day-number">{{ day.day }}<span v-if="day.key === today" class="today-mark">今</span></span>
               <span class="lunar-label">{{ day.label }}</span>
-              <span v-if="view === 'auspicious' && day.date.getMonth() === selected.getMonth() && matchesActivity(day, activity)" class="good-mark">宜</span>
+              <span v-if="isMatch" class="good-mark">宜</span>
             </button>
           </div>
 
@@ -177,7 +198,7 @@ onUnmounted(() => {
 
           <div class="calendar-note">
             <span>{{ view === 'calendar' ? '慢慢翻日历，好好过生活。' : (activity ? '按当日「宜」筛选，并排除同项「忌」。' : '按十二值神的黄道日筛选。') }}</span>
-            <label class="date-jump"><AppIcon name="calendar" /><span>跳转日期</span><input aria-label="跳转日期" type="date" :min="`${MIN_YEAR}-01-01`" :max="`${MAX_YEAR}-12-31`" :value="current.key" @change="jump(($event.target as HTMLInputElement).value)" /></label>
+            <label class="date-jump"><AppIcon name="calendar" /><span>跳转日期</span><input aria-label="跳转日期" type="date" :min="`${MIN_YEAR}-01-01`" :max="`${MAX_YEAR}-12-31`" :value="current.key" @change="onDateJump" /></label>
           </div>
         </section>
 

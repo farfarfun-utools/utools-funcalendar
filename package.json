@@ -1,6 +1,8 @@
 {
   "name": "@farfarfun/utools-funcalendar",
-  "funbuild": { "build": "sh build.sh" },
+  "funbuild": {
+    "build": "sh build.sh"
+  },
   "version": "1.0.3",
   "description": "时光常伴 FunCalendar：离线阳历、农历、节气与黄历宜忌，支持按事择吉的 uTools 插件",
   "license": "MIT",
@@ -9,27 +11,53 @@
     "type": "git",
     "url": "https://github.com/farfarfun-utools/utools-funcalendar.git"
   },
-  "bugs": { "url": "https://github.com/farfarfun-utools/utools-funcalendar/issues" },
-  "keywords": ["utools", "utools-plugin", "calendar", "lunar-calendar", "chinese-calendar", "almanac", "solar-terms", "auspicious-days", "offline", "vue3", "typescript", "farfarfun"],
+  "bugs": {
+    "url": "https://github.com/farfarfun-utools/utools-funcalendar/issues"
+  },
+  "keywords": [
+    "utools",
+    "utools-plugin",
+    "calendar",
+    "lunar-calendar",
+    "chinese-calendar",
+    "almanac",
+    "solar-terms",
+    "auspicious-days",
+    "offline",
+    "vue3",
+    "typescript",
+    "farfarfun"
+  ],
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.11.2",
-  "engines": { "node": ">=22.22.2" },
+  "engines": {
+    "node": ">=22.22.2"
+  },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint .",
     "test": "vitest run",
     "screenshots": "pnpm build && node scripts/screenshots.mjs"
   },
-  "dependencies": { "lunar-typescript": "1.8.6", "vue": "^3.5.13" },
+  "dependencies": {
+    "lunar-typescript": "1.8.6",
+    "vue": "^3.5.13"
+  },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^22.10.2",
     "@vitejs/plugin-vue": "^6.0.10",
     "@vue/test-utils": "^2.5.1",
+    "eslint": "^9.39.5",
+    "eslint-plugin-vue": "^10.12.1",
+    "globals": "^17.14.0",
     "jsdom": "^30.1.2",
     "typescript": "^5.7.2",
+    "typescript-eslint": "^8.73.0",
     "vite": "^7.3.7",
     "vitest": "^4.1.12",
     "vue-tsc": "^3.3.12"

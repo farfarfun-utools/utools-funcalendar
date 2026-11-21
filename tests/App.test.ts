@@ -8,10 +8,12 @@ import App from '../src/App.vue'
 let wrapper: VueWrapper
 let enter: (action: { code: string }) => void
 let search: (input: { text: string }) => void
+let tools: Map<string, (params?: Record<string, unknown> | null) => unknown>
 
 enableAutoUnmount(afterEach)
 
 beforeEach(() => {
+  tools = new Map()
   vi.useFakeTimers()
   vi.setSystemTime(new Date(2026, 9, 23, 12))
   // Node 的 Web Storage 会遮住 jsdom 的同名属性，测试明确使用浏览器存储。
@@ -21,6 +23,7 @@ beforeEach(() => {
   window.utools = {
     onPluginEnter: callback => { enter = callback },
     setSubInput: callback => { search = callback },
+    registerTool: (name, handler) => { tools.set(name, handler) },
   }
   wrapper = mount(App, { attachTo: document.body })
 })
@@ -107,5 +110,48 @@ describe('日历交互', () => {
     expect(localStorage.getItem('funcalendar-theme')).toBe('dark')
     await wrapper.get('.today-button').trigger('click')
     expect(wrapper.get('.hero-date').text()).toBe('23')
+  })
+  it('AI 工具容错空参数，并返回正确日期与择吉结果', () => {
+    const getDayTool = tools.get('get_calendar_day')!
+    const findDaysTool = tools.get('find_auspicious_days')!
+    expect((getDayTool({ date: '2026-02-17' }) as { lunarDate: string }).lunarDate).toBe('正月初一')
+    expect((findDaysTool({ month: ' 2026/2 ', activity: '嫁娶' }) as { month: string }).month).toBe('2026-02')
+    expect(() => getDayTool(null)).toThrow('有效日期')
+    expect(() => getDayTool(undefined)).toThrow('有效日期')
+    expect(() => findDaysTool(null)).toThrow('有效月份')
+    expect(() => findDaysTool(undefined)).toThrow('有效月份')
+  })
+  it('择吉视图中跨月补位日期不标记为吉日也不在 aria-label 中误报', async () => {
+    enter({ code: 'auspicious' })
+    await nextTick()
+    const outsideCells = wrapper.findAll('.day-cell.outside')
+    expect(outsideCells.length).toBeGreaterThan(0)
+    for (const cell of outsideCells) {
+      expect(cell.classes()).not.toContain('suitable')
+      expect(cell.attributes('aria-label')).not.toContain('黄道吉日')
+      expect(cell.attributes('aria-label')).not.toContain('，宜')
+    }
+  })
+  it('日期选择器输入超范围日期时提示错误并重置为当前选中日期', async () => {
+    const input = wrapper.get('[aria-label="跳转日期"]')
+    await input.setValue('1900-01-01')
+    expect(wrapper.get('[role="alert"]').text()).toContain('有效日期')
+    expect((input.element as HTMLInputElement).value).toBe('2026-10-23')
+  })
+  it('支持 Home、End、PageUp、PageDown、ArrowUp、ArrowDown 键盘导航', async () => {
+    const grid = () => wrapper.get('.day-cell.selected')
+    await grid().trigger('keydown', { key: 'Home' })
+    expect(wrapper.get('.hero-date').text()).toBe('01')
+    await grid().trigger('keydown', { key: 'End' })
+    expect(wrapper.get('.hero-date').text()).toBe('31')
+    await grid().trigger('keydown', { key: 'ArrowUp' })
+    expect(wrapper.get('.hero-date').text()).toBe('24')
+    await grid().trigger('keydown', { key: 'ArrowDown' })
+    expect(wrapper.get('.hero-date').text()).toBe('31')
+    await grid().trigger('keydown', { key: 'PageUp' })
+    expect(wrapper.get('[aria-label="月份"]').element).toHaveProperty('value', '9')
+    expect(wrapper.get('.hero-date').text()).toBe('30')
+    await grid().trigger('keydown', { key: 'PageDown' })
+    expect(wrapper.get('[aria-label="月份"]').element).toHaveProperty('value', '10')
   })
 })

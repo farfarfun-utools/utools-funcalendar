@@ -82,10 +82,11 @@ export function calendarDayInfo(input: unknown) {
 }
 
 export function auspiciousDays(input: unknown, activityInput: unknown = '') {
-  const month = typeof input === 'string' && /^\d{4}-\d{2}$/.test(input) ? input : ''
-  const date = parseDate(`${month}-01`)
+  const match = typeof input === 'string' ? /^(\d{4})[-/.](\d{1,2})$/.exec(input.trim()) : null
+  const date = match ? parseDate(`${match[1]}-${match[2]}-01`) : null
   if (!date) throw new Error(`请提供 ${MIN_YEAR}–${MAX_YEAR} 年内的有效月份 YYYY-MM`)
-  const activity = activityInput === undefined ? '' : activityInput
+  const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+  const activity = activityInput === undefined || activityInput === null ? '' : typeof activityInput === 'string' ? activityInput.trim() : activityInput
   if (typeof activity !== 'string' || !ACTIVITIES.some(item => item.value === activity)) throw new Error('事项只能是嫁娶、入宅、开市、出行或动土')
   return {
     month,
