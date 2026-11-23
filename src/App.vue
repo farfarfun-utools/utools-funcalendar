@@ -33,6 +33,21 @@ const dayCells = computed(() => {
 const matching = computed(() => dayCells.value.filter(cell => cell.isMatch))
 const monthTerms = computed(() => inMonth.value.filter(day => day.term))
 const nextTerm = computed(() => lunar.value.getNextJieQi(true))
+const nextTermInfo = computed(() => {
+  const term = nextTerm.value
+  const solar = term.getSolar()
+  const year = solar.getYear()
+  const month = solar.getMonth()
+  const day = solar.getDay()
+  const available = year >= MIN_YEAR && year <= MAX_YEAR
+  const crossYear = year !== selected.value.getFullYear()
+  return {
+    name: term.getName(),
+    date: localDate(year, month, day),
+    available,
+    label: crossYear ? `${year} 年 ${month} 月 ${day} 日` : `${month} 月 ${day} 日`,
+  }
+})
 const weekday = computed(() => `星期${WEEKDAYS[(selected.value.getDay() + 6) % 7]}`)
 const minMonth = computed(() => selected.value.getFullYear() === MIN_YEAR && selected.value.getMonth() === 0)
 const maxMonth = computed(() => selected.value.getFullYear() === MAX_YEAR && selected.value.getMonth() === 11)
@@ -85,6 +100,14 @@ function changeMonth(event: Event, part: 'year' | 'month') {
   select(localDate(year, month, Math.min(selected.value.getDate(), localDate(year, month + 1, 0).getDate())))
 }
 async function onGridKey(event: KeyboardEvent) {
+  if (event.altKey || event.ctrlKey || event.metaKey) return
+  if (event.key === 't' || event.key === 'T') {
+    event.preventDefault()
+    goToday()
+    await nextTick()
+    grid.value?.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus()
+    return
+  }
   const offsets: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }
   const offset = offsets[event.key]
   if (offset === undefined && !['Home', 'End', 'PageUp', 'PageDown'].includes(event.key)) return
@@ -93,7 +116,10 @@ async function onGridKey(event: KeyboardEvent) {
   if (offset !== undefined) date = localDate(date.getFullYear(), date.getMonth() + 1, date.getDate() + offset)
   else if (event.key === 'Home') date = localDate(date.getFullYear(), date.getMonth() + 1, 1)
   else if (event.key === 'End') date = localDate(date.getFullYear(), date.getMonth() + 2, 0)
-  else date = moveMonth(date, event.key === 'PageUp' ? -1 : 1)
+  else {
+    const step = (event.shiftKey ? 12 : 1) * (event.key === 'PageUp' ? -1 : 1)
+    date = moveMonth(date, step)
+  }
   select(date)
   await nextTick()
   grid.value?.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus()
@@ -164,7 +190,7 @@ onUnmounted(() => {
             </div>
             <div class="month-actions">
               <button class="icon-button" aria-label="上个月" :disabled="minMonth" @click="select(moveMonth(selected, -1))"><AppIcon name="chevron-left" /></button>
-              <button class="today-button" @click="goToday">今天</button>
+              <button class="today-button" title="回到今天 (T)" @click="goToday">今天</button>
               <button class="icon-button" aria-label="下个月" :disabled="maxMonth" @click="select(moveMonth(selected, 1))"><AppIcon name="chevron-right" /></button>
             </div>
           </div>
@@ -200,7 +226,7 @@ onUnmounted(() => {
             <span class="calendar-caption">阳历 · 农历 · 节气</span>
           </div>
           <div v-else class="matching-summary" aria-live="polite">
-            <AppIcon name="sparkle" /><span>本月 <strong>{{ matching.length }}</strong> 天{{ activity ? '宜' + activity : '为黄道吉日' }}</span><span>「宜」标记可点选查看</span>
+            <AppIcon name="sparkle" /><span>本月 <strong>{{ matching.length }}</strong> 天{{ activity ? '宜' + activity : '为黄道吉日' }}</span><span>{{ matching.length ? '「宜」标记可点选查看' : '可切换上下月查看' }}</span>
           </div>
 
           <div class="calendar-note">
@@ -225,7 +251,7 @@ onUnmounted(() => {
             <button v-if="showAll" class="collapse-fortune" @click="showAll = false">收起宜忌</button>
             <dl class="almanac-facts"><div><dt>冲煞</dt><dd>冲{{ lunar.getChongDesc() }} · 煞{{ lunar.getSha() }}</dd></div><div><dt>财神</dt><dd>{{ lunar.getDayPositionCaiDesc() }}</dd></div><div><dt>值日</dt><dd>{{ lunar.getZhiXing() }}日</dd></div></dl>
           </section>
-          <div class="next-term"><AppIcon name="leaf" /><span>下个节气 <strong>{{ nextTerm.getName() }}</strong></span><span>{{ nextTerm.getSolar().getMonth() }} 月 {{ nextTerm.getSolar().getDay() }} 日</span></div>
+          <button type="button" class="next-term" :disabled="!nextTermInfo.available" :title="nextTermInfo.available ? `跳转到${nextTermInfo.name}` : undefined" @click="select(nextTermInfo.date)"><AppIcon name="leaf" /><span>下个节气 <strong>{{ nextTermInfo.name }}</strong></span><span>{{ nextTermInfo.label }}</span></button>
         </aside>
       </div>
     </main>

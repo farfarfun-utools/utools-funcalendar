@@ -153,5 +153,23 @@ describe('日历交互', () => {
     expect(wrapper.get('.hero-date').text()).toBe('30')
     await grid().trigger('keydown', { key: 'PageDown' })
     expect(wrapper.get('[aria-label="月份"]').element).toHaveProperty('value', '10')
+    await grid().trigger('keydown', { key: 'PageUp', shiftKey: true })
+    expect(wrapper.get('[aria-label="年份"]').element).toHaveProperty('value', '2025')
+    await grid().trigger('keydown', { key: 'ArrowLeft', ctrlKey: true })
+    expect(wrapper.get('[aria-label="年份"]').element).toHaveProperty('value', '2025')
+    await grid().trigger('keydown', { key: 't' })
+    expect(wrapper.get('[aria-label="年份"]').element).toHaveProperty('value', '2026')
+    expect(wrapper.get('.day-cell.selected').attributes('aria-current')).toBe('date')
+  })
+  it('点击下个节气可直接跳转，跨年与 2100 年末边界显示正确', async () => {
+    await wrapper.get('.next-term').trigger('click')
+    expect(wrapper.get('[aria-label="月份"]').element).toHaveProperty('value', '11')
+    expect(wrapper.get('.date-card-bottom').text()).toContain('立冬')
+
+    await wrapper.get('[aria-label="跳转日期"]').setValue('2026-12-25')
+    expect(wrapper.get('.next-term').text()).toContain('2027 年')
+
+    await wrapper.get('[aria-label="跳转日期"]').setValue('2100-12-31')
+    expect(wrapper.get('.next-term').attributes('disabled')).toBeDefined()
   })
 })

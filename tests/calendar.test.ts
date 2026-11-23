@@ -3,10 +3,10 @@ import { auspiciousDays, calendarDayInfo, dateKey, getDay, localDate, matchesAct
 
 describe('日期与月视图', () => {
   it('接受本地日期，拒绝溢出日期与范围外的输入', () => {
-    for (const text of ['2024-02-29', ' 2024/2/29 ', '2024.2.29']) {
+    for (const text of ['2024-02-29', ' 2024/2/29 ', '2024.2.29', '2024年2月29日', '2024年02月29', '20240229']) {
       expect(dateKey(parseDate(text)!)).toBe('2024-02-29')
     }
-    for (const text of ['2026-02-29', '2024-13-01', '2024-00-01', '2024-04-31', '1900-12-31', '2101-01-01', '2024-01-00', 'bad']) {
+    for (const text of ['2026-02-29', '20260229', '2026年2月29日', '2024-13-01', '2024-00-01', '2024-04-31', '1900-12-31', '2101-01-01', '2024-01-00', 'bad']) {
       expect(parseDate(text)).toBeNull()
     }
   })

@@ -22,7 +22,10 @@ export function dateKey(date: Date): string {
 }
 
 export function parseDate(text: string): Date | null {
-  const match = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(text.trim())
+  const trimmed = text.trim()
+  const match = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(trimmed)
+    || /^(\d{4})年\s*(\d{1,2})月\s*(\d{1,2})日?$/.exec(trimmed)
+    || /^(\d{4})(\d{2})(\d{2})$/.exec(trimmed)
   if (!match) return null
   const [, y, m, d] = match
   const year = Number(y), month = Number(m), day = Number(d)
